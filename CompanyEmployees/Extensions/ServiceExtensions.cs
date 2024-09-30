@@ -20,7 +20,7 @@ namespace CompanyEmployees.Extensions
             });
 
 
-        public static void ConfigureIISIntegration(this IServiceCollection services) =>
+        public static void ConfigureIisIntegration(this IServiceCollection services) =>
             services.Configure<IISOptions>(options => { });
 
         public static void ConfigureLoggerService(this IServiceCollection services) =>
@@ -35,6 +35,9 @@ namespace CompanyEmployees.Extensions
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
             services.AddDbContext<RepositoryContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+
+        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) =>
+            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
 
     }
 
