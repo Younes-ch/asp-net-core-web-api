@@ -1,6 +1,0 @@
-@CompanyEmployees_HostAddress = http://localhost:5256
-
-GET {{CompanyEmployees_HostAddress}}/api/companies/
-Accept: application/json
-
-###

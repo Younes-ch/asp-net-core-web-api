@@ -1,4 +1,4 @@
-﻿namespace Shared.DataTransferObjects
+﻿namespace Shared.DataTransferObjects.Company
 {
     public record CompanyDto
     {
