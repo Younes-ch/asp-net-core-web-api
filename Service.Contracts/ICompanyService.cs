@@ -1,5 +1,4 @@
-﻿using Shared.DataTransferObjects;
-using Shared.DataTransferObjects.Company;
+﻿using Shared.DataTransferObjects.Company;
 
 namespace Service.Contracts
 {
@@ -9,5 +8,7 @@ namespace Service.Contracts
         CompanyDto GetCompany(Guid companyId, bool trackChanges);
         IEnumerable<CompanyDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
         CompanyDto CreateCompany(CreateCompanyDto company);
+        (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection(
+            IEnumerable<CreateCompanyDto> companyCollection);
     }
 }
