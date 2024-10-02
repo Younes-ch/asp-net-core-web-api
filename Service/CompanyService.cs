@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.Exceptions.BadRequestExceptions;
+using Entities.Exceptions.NotFoundExceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -30,6 +32,19 @@ namespace Service
             var companyDto = mapper.Map<CompanyDto>(company);
 
             return companyDto;
+        }
+
+        public IEnumerable<CompanyDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        {
+            if (ids is null) throw new IdParametersBadRequestException();
+
+            var companyEntities = repository.CompanyRepository.GetByIds(ids, trackChanges);
+
+            if (ids.Count() != companyEntities.Count()) throw new CollectionByIdsBadRequestException();
+
+            var companiesToReturn = mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
+
+            return companiesToReturn;
         }
 
         public CompanyDto CreateCompany(CreateCompanyDto company)

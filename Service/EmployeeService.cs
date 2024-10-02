@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.Exceptions.NotFoundExceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
