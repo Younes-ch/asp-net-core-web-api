@@ -2,15 +2,16 @@
 
 ## Purpose
 
-I'm currently on the journey to mastering .NET, starting with ASP.NET Web APIs. So, This project is made for learning purposes.
+I'm currently on the journey to dedicate my career to the .NET ecosystem, starting with ASP.NET Web APIs. So, this project is for learning purposes.
 
 ## Contents
 
 The project covers a lot of topics:
 
-- Logging
-- Onion Architecture Implementation
-- Content Negotiation
+- Logging with NLog
+- Onion Architecture Implementation (with Repository pattern)
+- Content Negotiation (Supports XML/CSV Outputs)
+- Handling GET, POST, PUT, PATCH, DELETE Requests
 - Error handling
 - Validation
 - Paging / Filtering / Searching / Sorting
