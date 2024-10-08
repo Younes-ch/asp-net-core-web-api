@@ -81,5 +81,25 @@ namespace Service
 
             return (companies: companyCollectionToReturn, ids: ids);
         }
+
+        public void UpdateCompany(Guid companyId, UpdateCompanyDto companyForUpdate, bool trackChanges)
+        {
+            var companyEntity = repository.CompanyRepository.GetCompany(companyId, trackChanges);
+
+            if (companyEntity is null) throw new CompanyNotFoundException(companyId);
+
+            mapper.Map(companyForUpdate, companyEntity);
+            repository.Save();
+        }
+
+        public void DeleteCompany(Guid companyId, bool trackChanges)
+        {
+            var company = repository.CompanyRepository.GetCompany(companyId, trackChanges);
+
+            if (company is null) throw new CompanyNotFoundException(companyId);
+
+            repository.CompanyRepository.DeleteCompany(company);
+            repository.Save();
+        }
     }
 }
