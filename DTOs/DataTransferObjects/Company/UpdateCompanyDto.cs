@@ -2,9 +2,8 @@
 
 namespace Shared.DataTransferObjects.Company
 {
-    public record UpdateCompanyDto(
-        string Name,
-        string Address,
-        string Country,
-        IEnumerable<CreateEmployeeDto> Employees);
+    public record UpdateCompanyDto : ManipulateEmployeeDto
+    {
+        public IEnumerable<CreateEmployeeDto>? Employees { get; init; }
+    }
 }
