@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Contracts;
+﻿using Contracts;
 
 namespace Repository
 {
@@ -16,6 +11,6 @@ namespace Repository
         public ICompanyRepository CompanyRepository => _companyRepository.Value;
         public IEmployeeRepository EmployeeRepository => _employeeRepository.Value;
 
-        public void Save() => repositoryContext.SaveChanges();
+        public async Task SaveAsync() => await repositoryContext.SaveChangesAsync();
     }
 }

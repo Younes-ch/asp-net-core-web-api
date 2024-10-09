@@ -12,23 +12,23 @@ namespace Service
         ILoggerManager logger,
         IMapper mapper) : IEmployeeService
     {
-        public IEnumerable<EmployeeDto> GetEmployees(Guid companyId, bool trackChanges)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges)
         {
-            var company = repository.CompanyRepository.GetCompany(companyId, trackChanges);
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
             if (company is null) throw new CompanyNotFoundException(companyId);
 
-            var employees = repository.EmployeeRepository.GetEmployees(companyId, trackChanges);
+            var employees = await repository.EmployeeRepository.GetEmployeesAsync(companyId, trackChanges);
             var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
 
             return employeesDto;
         }
 
-        public EmployeeDto GetEmployee(Guid companyId, Guid employeeId, bool trackChanges)
+        public async Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges)
         {
-            var company = repository.CompanyRepository.GetCompany(companyId, trackChanges);
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
             if (company is null) throw new CompanyNotFoundException(companyId);
 
-            var employee = repository.EmployeeRepository.GetEmployee(companyId, employeeId, trackChanges);
+            var employee = await repository.EmployeeRepository.GetEmployeeAsync(companyId, employeeId, trackChanges);
 
             if (employee is null) throw new EmployeeNotFoundException(employeeId);
 
@@ -36,59 +36,59 @@ namespace Service
             return employeeDto;
         }
 
-        public EmployeeDto CreateEmployee(Guid companyId, CreateEmployeeDto employee, bool trackChanges)
+        public async Task<EmployeeDto> CreateEmployeeAsync(Guid companyId, CreateEmployeeDto employee, bool trackChanges)
         {
-            var company = repository.CompanyRepository.GetCompany(companyId, trackChanges);
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
 
             if (company is null) throw new CompanyNotFoundException(companyId);
 
             var employeeEntity = mapper.Map<Employee>(employee);
 
             repository.EmployeeRepository.CreateEmployee(companyId, employeeEntity);
-            repository.Save();
+            await repository.SaveAsync();
 
             var employeeToReturn = mapper.Map<EmployeeDto>(employeeEntity);
 
             return employeeToReturn;
         }
 
-        public void DeleteEmployee(Guid companyId, Guid employeeId, bool trackChanges)
+        public async Task DeleteEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges)
         {
-            var company = repository.CompanyRepository.GetCompany(companyId, trackChanges);
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
 
             if (company is null) throw new CompanyNotFoundException(companyId);
 
-            var employee = repository.EmployeeRepository.GetEmployee(companyId, employeeId, trackChanges);
+            var employee = await repository.EmployeeRepository.GetEmployeeAsync(companyId, employeeId, trackChanges);
 
             if (employee is null) throw new EmployeeNotFoundException(employeeId);
 
             repository.EmployeeRepository.DeleteEmployee(employee);
-            repository.Save();
+            await repository.SaveAsync();
         }
 
-        public void UpdateEmployee(Guid companyId, Guid employeeId, UpdateEmployeeDto employeeForUpdate,
+        public async Task UpdateEmployeeAsync(Guid companyId, Guid employeeId, UpdateEmployeeDto employeeForUpdate,
             bool compTrackChanges, bool empTrackChanges)
         {
-            var company = repository.CompanyRepository.GetCompany(companyId, compTrackChanges);
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, compTrackChanges);
 
             if (company is null) throw new CompanyNotFoundException(companyId);
 
-            var employeeEntity = repository.EmployeeRepository.GetEmployee(companyId, employeeId, empTrackChanges);
+            var employeeEntity = await repository.EmployeeRepository.GetEmployeeAsync(companyId, employeeId, empTrackChanges);
 
             if (employeeEntity is null) throw new EmployeeNotFoundException(employeeId);
 
             mapper.Map(employeeForUpdate, employeeEntity);
-            repository.Save();
+            await repository.SaveAsync();
         }
 
-        public (UpdateEmployeeDto employeeToPatch, Employee employeeEntity) GetEmployeeForPatch
+        public async Task<(UpdateEmployeeDto employeeToPatch, Employee employeeEntity)> GetEmployeeForPatchAsync
             (Guid companyId, Guid employeeId, bool compTrackChanges, bool empTrackChanges)
         {
-            var company = repository.CompanyRepository.GetCompany(companyId, compTrackChanges);
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, compTrackChanges);
 
             if (company is null) throw new CompanyNotFoundException(companyId);
 
-            var employeeEntity = repository.EmployeeRepository.GetEmployee(companyId, employeeId, empTrackChanges);
+            var employeeEntity = await repository.EmployeeRepository.GetEmployeeAsync(companyId, employeeId, empTrackChanges);
 
             if (employeeEntity is null) throw new EmployeeNotFoundException(employeeId);
 
@@ -97,10 +97,10 @@ namespace Service
             return (employeeToPatch, employeeEntity);
         }
 
-        public void SaveChangesForPatch(UpdateEmployeeDto employeeToPatch, Employee employeeEntity)
+        public async Task SaveChangesForPatchAsync(UpdateEmployeeDto employeeToPatch, Employee employeeEntity)
         {
             mapper.Map(employeeToPatch, employeeEntity);
-            repository.Save();
+            await repository.SaveAsync();
         }
     }
 }

@@ -14,6 +14,8 @@ The project covers a lot of topics:
 - Handling GET, POST, PUT, PATCH, DELETE Requests
 - Error handling
 - Validation
+- Asynchronous code
+- Action filters
 - Paging / Filtering / Searching / Sorting
 - API Versioning
 - Rate Limiting
