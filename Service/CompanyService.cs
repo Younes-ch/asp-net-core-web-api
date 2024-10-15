@@ -26,12 +26,18 @@ namespace Service
 
         public async Task<CompanyDto> GetCompanyAsync(Guid companyId, bool trackChanges)
         {
-            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
-            if (company is null) throw new CompanyNotFoundException(companyId);
+            var company = await GetCompanyAndCheckIfItExistsAsync(companyId, trackChanges);
 
             var companyDto = mapper.Map<CompanyDto>(company);
 
             return companyDto;
+        }
+
+        private async Task<Company> GetCompanyAndCheckIfItExistsAsync(Guid companyId, bool trackChanges)
+        {
+            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
+            if (company is null) throw new CompanyNotFoundException(companyId);
+            return company;
         }
 
         public async Task<IEnumerable<CompanyDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
@@ -84,9 +90,7 @@ namespace Service
 
         public async Task UpdateCompanyAsync(Guid companyId, UpdateCompanyDto companyForUpdate, bool trackChanges)
         {
-            var companyEntity = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
-
-            if (companyEntity is null) throw new CompanyNotFoundException(companyId);
+            var companyEntity = await GetCompanyAndCheckIfItExistsAsync(companyId, trackChanges);
 
             mapper.Map(companyForUpdate, companyEntity);
             await repository.SaveAsync();
@@ -94,9 +98,7 @@ namespace Service
 
         public async Task DeleteCompanyAsync(Guid companyId, bool trackChanges)
         {
-            var company = await repository.CompanyRepository.GetCompanyAsync(companyId, trackChanges);
-
-            if (company is null) throw new CompanyNotFoundException(companyId);
+            var company = await GetCompanyAndCheckIfItExistsAsync(companyId, trackChanges);
 
             repository.CompanyRepository.DeleteCompany(company);
             await repository.SaveAsync();

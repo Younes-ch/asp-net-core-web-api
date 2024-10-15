@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using CompanyEmployees.Presentation.ActionFilters;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects.Employee;
@@ -24,26 +25,19 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateEmployee(Guid companyId, [FromBody] CreateEmployeeDto employee)
         {
-            if (employee is null) return BadRequest("CreateEmployeeDto is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             var employeeToReturn = await service.EmployeeService.CreateEmployeeAsync(companyId, employee, false);
 
             return CreatedAtRoute("GetEmployeeById", new { companyId, employeeId = employeeToReturn.Id }, employeeToReturn);
         }
 
         [HttpPut("{employeeId:guid}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateEmployee(Guid companyId, Guid employeeId,
             [FromBody] UpdateEmployeeDto employeeForUpdate)
         {
-            if (employeeForUpdate is null) return BadRequest("EmployeeForUpdateDto object is null");
-
-            if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
-
             await service.EmployeeService.UpdateEmployeeAsync(companyId, employeeId, employeeForUpdate, compTrackChanges: false, empTrackChanges: true);
 
             return NoContent();
