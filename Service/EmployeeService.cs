@@ -4,6 +4,7 @@ using Entities.Exceptions.NotFoundExceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects.Employee;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -12,14 +13,14 @@ namespace Service
         ILoggerManager logger,
         IMapper mapper) : IEmployeeService
     {
-        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges)
+        public async Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
         {
             await CheckIfCompanyExistsAsync(companyId, trackChanges);
 
-            var employees = await repository.EmployeeRepository.GetEmployeesAsync(companyId, trackChanges);
-            var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+            var employeesWithMetaData = await repository.EmployeeRepository.GetEmployeesAsync(companyId, employeeParameters, trackChanges);
+            var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employeesWithMetaData);
 
-            return employeesDto;
+            return (employees: employeesDto, metaData: employeesWithMetaData.MetaData);
         }
 
         private async Task CheckIfCompanyExistsAsync(Guid companyId, bool trackChanges)
