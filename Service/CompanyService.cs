@@ -7,6 +7,7 @@ using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.DataTransferObjects.Company;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -15,13 +16,13 @@ namespace Service
         ILoggerManager logger,
         IMapper mapper) : ICompanyService
     {
-        public async Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges)
+        public async Task<(IEnumerable<CompanyDto> companies, MetaData metaData)> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
         {
-            var companies = await repository.CompanyRepository.GetAllCompaniesAsync(trackChanges);
+            var companiesMetaData = await repository.CompanyRepository.GetAllCompaniesAsync(companyParameters, trackChanges);
 
-            var companiesDto = mapper.Map<IEnumerable<CompanyDto>>(companies);
+            var companiesDto = mapper.Map<IEnumerable<CompanyDto>>(companiesMetaData);
 
-            return companiesDto;
+            return (companiesDto, companiesMetaData.MetaData);
         }
 
         public async Task<CompanyDto> GetCompanyAsync(Guid companyId, bool trackChanges)

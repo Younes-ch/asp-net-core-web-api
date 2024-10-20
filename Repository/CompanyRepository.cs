@@ -1,16 +1,21 @@
 ﻿using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.RequestFeatures;
 
 namespace Repository
 {
     public class CompanyRepository(RepositoryContext repositoryContext)
         : RepositoryBase<Company>(repositoryContext), ICompanyRepository
     {
-        public async Task<IEnumerable<Company>> GetAllCompaniesAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
+        public async Task<PagedList<Company>> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
+        {
+            var companies = await FindAll(trackChanges)
                 .OrderBy(company => company.Name)
                 .ToListAsync();
+
+            return PagedList<Company>.ToPagedList(companies, companyParameters.PageNumber, companyParameters.PageSize);
+        }
 
         public async Task<Company> GetCompanyAsync(Guid companyId, bool trackChanges) => 
             await FindByCondition(c => c.Id.Equals(companyId), trackChanges)
