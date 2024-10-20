@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities.Exceptions.BadRequestExceptions;
 using Entities.Exceptions.NotFoundExceptions;
 using Entities.Models;
 using Service.Contracts;
@@ -15,6 +16,8 @@ namespace Service
     {
         public async Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
         {
+            if (!employeeParameters.ValidAgeRange) throw new MaxAgeRangeBadRequestException();
+
             await CheckIfCompanyExistsAsync(companyId, trackChanges);
 
             var employeesWithMetaData = await repository.EmployeeRepository.GetEmployeesAsync(companyId, employeeParameters, trackChanges);
