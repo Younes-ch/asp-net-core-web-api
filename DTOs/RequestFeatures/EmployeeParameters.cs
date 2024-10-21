@@ -6,5 +6,7 @@
         public uint MaxAge { get; set; } = int.MaxValue;
 
         public bool ValidAgeRange => MinAge < MaxAge;
+
+        public string? SearchTerm { get; set; }
     }
 }
