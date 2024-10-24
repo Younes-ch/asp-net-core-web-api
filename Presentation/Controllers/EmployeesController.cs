@@ -24,9 +24,9 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpGet("{employeeId:guid}", Name = "GetEmployeeById")]
-        public async Task<IActionResult> GetEmployee(Guid companyId, Guid employeeId)
+        public async Task<IActionResult> GetEmployee(Guid companyId, Guid employeeId, [FromQuery] EmployeeParameters employeeParameters)
         {
-            var employee = await service.EmployeeService.GetEmployeeAsync(companyId, employeeId, trackChanges: false);
+            var employee = await service.EmployeeService.GetEmployeeAsync(companyId, employeeId, trackChanges: false, employeeParameters);
             return Ok(employee);
         }
 
