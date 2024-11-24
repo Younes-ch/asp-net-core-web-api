@@ -15,7 +15,6 @@ namespace CompanyEmployees.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
         {
-
             var pagedResult = await service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
@@ -31,7 +30,8 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpGet("collection/({ids})", Name = "CompanyCollection")]
-        public async Task<IActionResult> GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        public async Task<IActionResult> GetCompanyCollection(
+            [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
             var companies = await service.CompanyService.GetByIdsAsync(ids, trackChanges: false);
 
@@ -45,11 +45,11 @@ namespace CompanyEmployees.Presentation.Controllers
             var createdCompany = await service.CompanyService.CreateCompanyAsync(company);
 
             return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
-
         }
 
         [HttpPost("collection")]
-        public async Task<IActionResult> CreateCompanyCollection([FromBody] IEnumerable<CreateCompanyDto> companyCollection)
+        public async Task<IActionResult> CreateCompanyCollection(
+            [FromBody] IEnumerable<CreateCompanyDto> companyCollection)
         {
             var result = await service.CompanyService.CreateCompanyCollectionAsync(companyCollection);
 
@@ -70,6 +70,14 @@ namespace CompanyEmployees.Presentation.Controllers
             await service.CompanyService.DeleteCompanyAsync(id, trackChanges: false);
 
             return NoContent();
+        }
+
+        [HttpOptions]
+        public IActionResult GetCompaniesOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST");
+
+            return Ok();
         }
     }
 }

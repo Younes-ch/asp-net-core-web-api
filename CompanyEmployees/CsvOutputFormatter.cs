@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
-using Shared.DataTransferObjects;
 using Shared.DataTransferObjects.Company;
 
 namespace CompanyEmployees
@@ -25,7 +24,8 @@ namespace CompanyEmployees
             return false;
         }
 
-        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context,
+            Encoding selectedEncoding)
         {
             var response = context.HttpContext.Response;
             var buffer = new StringBuilder();
