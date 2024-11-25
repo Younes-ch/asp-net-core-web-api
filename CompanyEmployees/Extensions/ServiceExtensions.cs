@@ -50,6 +50,9 @@ namespace CompanyEmployees.Extensions
             });
         }
 
+        public static void ConfigureResponseCaching(this IServiceCollection services) =>
+            services.AddResponseCaching();
+
         public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) =>
             builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
     }
