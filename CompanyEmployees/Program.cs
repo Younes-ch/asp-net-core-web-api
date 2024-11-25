@@ -1,7 +1,7 @@
 using CompanyEmployees.Extensions;
+using CompanyEmployees.Presentation;
 using CompanyEmployees.Presentation.ActionFilters;
 using Contracts;
-using Entities.Models;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -31,10 +31,9 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+builder.Services.ConfigureVersioning();
+
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
@@ -49,7 +48,7 @@ builder.Services.AddControllers(config =>
     })
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCsvFormatter()
-    .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+    .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -59,7 +58,7 @@ var app = builder.Build();
 var logger = app.Services.GetRequiredService<ILoggerManager>();
 app.ConfigureExceptionHandler(logger);
 
-if (app.Environment.IsProduction()) 
+if (app.Environment.IsProduction())
     app.UseHsts();
 
 // Configure the HTTP request pipeline.
