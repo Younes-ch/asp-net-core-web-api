@@ -1,4 +1,3 @@
-﻿namespace Shared.DataTransferObjects.Employee
-{
-    public record CreateEmployeeDto : ManipulateEmployeeDto;
-}
+﻿namespace Shared.DataTransferObjects.Employee;
+
+public record CreateEmployeeDto : ManipulateEmployeeDto;

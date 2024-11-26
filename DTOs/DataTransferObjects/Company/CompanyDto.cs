@@ -1,9 +1,8 @@
-﻿namespace Shared.DataTransferObjects.Company
+﻿namespace Shared.DataTransferObjects.Company;
+
+public record CompanyDto
 {
-    public record CompanyDto
-    {
-        public Guid Id { get; init; }
-        public string? Name { get; init; }
-        public string? FullAddress { get; init; }
-    }
+    public Guid Id { get; init; }
+    public string? Name { get; init; }
+    public string? FullAddress { get; init; }
 }

@@ -1,13 +1,14 @@
 ﻿using Entities.Models;
 using Shared.RequestFeatures;
 
-namespace Contracts
+namespace Contracts;
+
+public interface IEmployeeRepository
 {
-    public interface IEmployeeRepository
-    {
-        Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
-        Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges);
-        void CreateEmployee(Guid companyId, Employee employee);
-        void DeleteEmployee(Employee employee);
-    }
+    Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters,
+        bool trackChanges);
+
+    Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges);
+    void CreateEmployee(Guid companyId, Employee employee);
+    void DeleteEmployee(Employee employee);
 }

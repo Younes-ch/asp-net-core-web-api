@@ -3,25 +3,24 @@ using Entities.Models;
 using Shared.DataTransferObjects.Company;
 using Shared.DataTransferObjects.Employee;
 
-namespace CompanyEmployees
+namespace CompanyEmployees;
+
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<Company, CompanyDto>()
-                .ForMember(c => c.FullAddress,
+        CreateMap<Company, CompanyDto>()
+            .ForMember(c => c.FullAddress,
                 opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
 
-            CreateMap<Employee, EmployeeDto>();
+        CreateMap<Employee, EmployeeDto>();
 
-            CreateMap<CreateCompanyDto, Company>();
+        CreateMap<CreateCompanyDto, Company>();
 
-            CreateMap<CreateEmployeeDto, Employee>();
+        CreateMap<CreateEmployeeDto, Employee>();
 
-            CreateMap<UpdateEmployeeDto, Employee>().ReverseMap();
+        CreateMap<UpdateEmployeeDto, Employee>().ReverseMap();
 
-            CreateMap<UpdateCompanyDto, Company>();
-        }
+        CreateMap<UpdateCompanyDto, Company>();
     }
 }

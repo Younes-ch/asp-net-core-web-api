@@ -1,4 +1,3 @@
-﻿namespace Shared.DataTransferObjects.Employee
-{
-    public record EmployeeDto(Guid Id, string Name, int Age, string Position);
-}
+﻿namespace Shared.DataTransferObjects.Employee;
+
+public record EmployeeDto(Guid Id, string Name, int Age, string Position);

@@ -12,7 +12,7 @@ public class CompaniesV2Controller(IServiceManager service) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
-        var pagedResult = await service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
+        var pagedResult = await service.CompanyService.GetAllCompaniesAsync(companyParameters, false);
 
         var companiesV2 = pagedResult.companies.Select(c => $"'{c.Name} V2");
 

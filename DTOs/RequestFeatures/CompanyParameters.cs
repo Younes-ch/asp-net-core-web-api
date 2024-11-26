@@ -1,4 +1,3 @@
-﻿namespace Shared.RequestFeatures
-{
-    public class CompanyParameters : RequestParameters;
-}
+﻿namespace Shared.RequestFeatures;
+
+public class CompanyParameters : RequestParameters;

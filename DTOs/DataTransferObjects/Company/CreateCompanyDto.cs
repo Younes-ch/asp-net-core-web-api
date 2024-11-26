@@ -1,9 +1,8 @@
 ﻿using Shared.DataTransferObjects.Employee;
 
-namespace Shared.DataTransferObjects.Company
+namespace Shared.DataTransferObjects.Company;
+
+public record CreateCompanyDto : ManipulateCompanyDto
 {
-    public record CreateCompanyDto : ManipulateCompanyDto
-    {
-        public IEnumerable<CreateEmployeeDto>? Employees { get; init; }
-    }
+    public IEnumerable<CreateEmployeeDto>? Employees { get; init; }
 }
