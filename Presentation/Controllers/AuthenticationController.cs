@@ -21,4 +21,14 @@ public class AuthenticationController(IServiceManager service) : ControllerBase
 
         return BadRequest(ModelState);
     }
+
+    [HttpPost("login")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
+    {
+        if (!await service.AuthenticationService.ValidateUser(user))
+            return Unauthorized();
+
+        return Ok(new { Token = await service.AuthenticationService.CreateToken() });
+    }
 }

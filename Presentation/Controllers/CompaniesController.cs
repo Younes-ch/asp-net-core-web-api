@@ -2,6 +2,7 @@
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects.Company;
@@ -15,7 +16,8 @@ namespace CompanyEmployees.Presentation.Controllers;
 // [ResponseCache(CacheProfileName = "120SecondsDuration")]
 public class CompaniesController(IServiceManager service) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet(Name = "GetCompanies")]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
         var pagedResult = await service.CompanyService.GetAllCompaniesAsync(companyParameters, false);
