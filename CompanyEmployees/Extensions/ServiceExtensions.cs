@@ -1,7 +1,9 @@
 ﻿using AspNetCoreRateLimit;
 using Contracts;
+using Entities.Models;
 using LoggerService;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -72,22 +74,22 @@ public static class ServiceExtensions
     public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
     {
         services.AddHttpCacheHeaders(
-            (expirationOptions) =>
+            expirationOptions =>
             {
                 expirationOptions.MaxAge = 65;
                 expirationOptions.CacheLocation = CacheLocation.Private;
             },
-            (validationOptions) => { validationOptions.MustRevalidate = true; });
+            validationOptions => { validationOptions.MustRevalidate = true; });
     }
 
     public static void ConfigureRateLimitingOptions(this IServiceCollection services)
     {
         var rateLimitRules = new List<RateLimitRule>
         {
-            new RateLimitRule
+            new()
             {
                 Endpoint = "*",
-                Limit = 3,
+                Limit = 30,
                 Period = "5m"
             }
         };
@@ -97,6 +99,21 @@ public static class ServiceExtensions
         services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
         services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
         services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+    }
+
+    public static void ConfigureIdentity(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 10;
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<RepositoryContext>()
+            .AddDefaultTokenProviders();
     }
 
     public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)

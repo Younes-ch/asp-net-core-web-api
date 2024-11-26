@@ -2,6 +2,7 @@
 using Entities.Models;
 using Shared.DataTransferObjects.Company;
 using Shared.DataTransferObjects.Employee;
+using Shared.DataTransferObjects.User;
 
 namespace CompanyEmployees;
 
@@ -22,5 +23,7 @@ public class MappingProfile : Profile
         CreateMap<UpdateEmployeeDto, Employee>().ReverseMap();
 
         CreateMap<UpdateCompanyDto, Company>();
+
+        CreateMap<UserForRegistrationDto, User>();
     }
 }
