@@ -36,6 +36,7 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 builder.Services.ConfigureVersioning();
 builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureHttpCacheHeaders();
 
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
@@ -74,6 +75,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = Forward
 
 app.UseCors("CorsPolicy");
 app.UseResponseCaching();
+app.UseHttpCacheHeaders();
 
 app.UseAuthorization();
 

@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using LoggerService;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -67,8 +68,16 @@ public static class ServiceExtensions
         services.AddResponseCaching();
     }
 
-        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder) =>
-            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+    public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+    {
+        services.AddHttpCacheHeaders(
+            (expirationOptions) =>
+            {
+                expirationOptions.MaxAge = 65;
+                expirationOptions.CacheLocation = CacheLocation.Private;
+            },
+            (validationOptions) => { validationOptions.MustRevalidate = true; });
+    }
 
     public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)
     {
