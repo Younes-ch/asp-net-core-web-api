@@ -19,11 +19,11 @@ namespace Service;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly IConfiguration _configuration;
+
+    private readonly JwtConfiguration _jwtConfiguration;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-
-    private readonly JwtConfiguration _jwtConfiguration;
 
     private User? _user;
 

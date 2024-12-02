@@ -64,6 +64,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureSwagger();
 
 
 var app = builder.Build();
@@ -88,6 +89,13 @@ app.UseHttpCacheHeaders();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI(setup =>
+{
+    setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Honnous v1");
+    setup.SwaggerEndpoint("/swagger/v2/swagger.json", "Honnous v2");
+});
 
 app.MapControllers();
 

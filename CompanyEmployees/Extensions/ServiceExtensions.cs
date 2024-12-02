@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using AspNetCoreRateLimit;
+using CompanyEmployees.Presentation;
 using Contracts;
 using Entities.ConfigurationModels;
 using Entities.Models;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Repository;
 using Service;
 using Service.Contracts;
@@ -147,6 +149,61 @@ public static class ServiceExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+    }
+
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(setup =>
+        {
+            setup.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Honnous API",
+                Version = "v1",
+                Description = "CompanyEmployees API Honnous",
+                TermsOfService = new Uri("https://example.com/terms"),
+                Contact = new OpenApiContact
+                {
+                    Name = "John Doe",
+                    Email = "John.Doe@gmail.com",
+                    Url = new Uri("https://x.com/johndoe")
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "CompanyEmployees API LICX",
+                    Url = new Uri("https://example.com/license")
+                }
+            });
+            setup.SwaggerDoc("v2", new OpenApiInfo { Title = "Honnous API", Version = "v2" });
+
+            var xmlFile = $"{typeof(AssemblyReference).Assembly.GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            setup.IncludeXmlComments(xmlPath);
+
+            setup.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Place to add JWT with Bearer",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+
+            setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Name = "Bearer"
+                    },
+                    []
+                }
+            });
+        });
     }
 
     public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)
